@@ -12,7 +12,7 @@ class User
 
     public function post($message)
     {
-        $this->messages[] = $message;
+        $this->messages[] = new Message($message);
     }
 
     public function messages()
