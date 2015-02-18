@@ -4,13 +4,17 @@ namespace TwiCli;
 
 class UserTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $this->user = new User('Alice');
+        $this->user->post('This is a test message');
+    }
+
     public function testUserCanAddPostMessage()
     {
-        $user = new User('Alice');
-        $user->post('This is a test message');
+        $messages = $this->user->messages();
 
-        $wall = $user->messages();
-        $this->assertEquals(1, count($wall));
-        $this->assertEquals('This is a test message', $wall[0]);
+        $this->assertEquals(1, count($messages));
+        $this->assertEquals('This is a test message', $messages[0]);
     }
 }
