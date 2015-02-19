@@ -24,12 +24,7 @@ class TwiCli
             $this->timeline($name);
             break;
         case 'follows':
-            $following = $input[2];
-
-            $user = $this->findUser($name);
-            $followingUser = $this->findUser($following);
-
-            $user->follow($followingUser);
+            $this->follows($name, $input);
             break;
         case 'wall':
             $user = $this->findUser($name);
@@ -48,6 +43,16 @@ class TwiCli
 
         $user = $this->findUser($name);
         $user->post($message);
+    }
+
+    private function follows($name, $input)
+    {
+        $target = $input[2];
+
+        $user = $this->findUser($name);
+        $followingUser = $this->findUser($target);
+
+        $user->follow($followingUser);
     }
 
     private function timeline($name)
