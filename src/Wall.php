@@ -45,6 +45,6 @@ class Wall
         }
 
         ksort($result);
-        return array_values($result);
+        return array_reverse(array_values($result));
     }
 }

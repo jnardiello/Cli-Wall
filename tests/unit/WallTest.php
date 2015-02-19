@@ -20,7 +20,7 @@ class WallTest extends \PHPUnit_Framework_TestCase
         $wall = $alice->wall();
 
         $this->assertEquals(3, count($wall));
-        $this->assertEquals('This is a test message', $wall[0]->getValue());
         $this->assertEquals('This is another test message', $wall[1]->getValue());
+        $this->assertEquals('This is a test message', $wall[2]->getValue());
     }
 }
