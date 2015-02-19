@@ -14,16 +14,17 @@ class User
     public function __construct($name)
     {
         $this->name = $name;
+        $this->wall = new Wall($this);
     }
 
     public function post($message)
     {
-        $this->messages[] = new Message($message);
+        $this->wall->add(new Message($message));
     }
 
     public function getMessages()
     {
-        return $this->messages;
+        return $this->wall->getMyMessages();
     }
 
     public function getName()
