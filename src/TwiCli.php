@@ -14,13 +14,18 @@ class TwiCli
     {
         $input = explode(' ', $input);
         $name = $input[0];
-        $cmd = $input[1];
+        $cmd = (isset($input[1])) ? $input[1] : '';
 
         if ($cmd == '->') {
             $message = implode(' ', array_slice($input, 2));
 
             $user = $this->findUser($name);
             $user->post($message);
+        } else if ($cmd == '') {
+            $user = $this->findUser($name);
+            foreach ($user->getMessages() as $message) {
+                echo $message->getValue() . "\n";
+            }
         }
     }
 
@@ -33,7 +38,7 @@ class TwiCli
             }
         }
 
-        // Otherwise we add it
+        // Otherwise we add it and return it
         $newUser = new User($currentName);
         $this->users[$newUser->getName()] = $newUser;
         return $newUser;

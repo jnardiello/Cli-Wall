@@ -16,7 +16,7 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
 
         // We expect one user (Alice) and two messages for Alice
         $this->assertUsersEquals(1);
-        $this->assertMessagesPerUser(2, 'Alice');
+        $this->assertMessagesPerUserEquals(2, 'Alice');
     }
 
     public function testMultipleUserCanPostOnRespectiveWall()
@@ -26,8 +26,21 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
 
         // We expect two users with one message each
         $this->assertUsersEquals(2);
-        $this->assertMessagesPerUser(1, 'Alice');
-        $this->assertMessagesPerUser(1, 'Bob');
+        $this->assertMessagesPerUserEquals(1, 'Alice');
+        $this->assertMessagesPerUserEquals(1, 'Bob');
+    }
+
+    public function testCanReadAUserTimeline()
+    {
+        $this->twiCli->process('Alice -> Hello World');
+        $this->twiCli->process('Alice -> Yesterday the weather was really nice');
+        $this->twiCli->process('Bob -> Yesterday evening it was amazing!');
+
+        $this->twiCli->process('Alice');
+        $this->expectOutputString(
+            "Hello World\n" .
+            "Yesterday the weather was really nice\n"
+        );
     }
 
     private function assertUsersEquals($number)
