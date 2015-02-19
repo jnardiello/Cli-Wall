@@ -18,7 +18,7 @@ class Wall
 
     public function getMyMessages()
     {
-        return $this->messages;
+        return array_reverse($this->messages);
     }
 
     public function add(Message $message)

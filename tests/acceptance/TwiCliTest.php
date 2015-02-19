@@ -36,8 +36,8 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
 
         $this->twiCli->process('Alice');
         $this->expectOutputString(
-            "Hello World (1 seconds ago)\n" .
-            "Yesterday the weather was really nice (1 seconds ago)\n"
+            "Yesterday the weather was really nice (1 seconds ago)\n" .
+            "Hello World (1 seconds ago)\n"
         );
     }
 
