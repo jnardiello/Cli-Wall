@@ -8,24 +8,33 @@ namespace TwiCli;
  */
 class TwiCli
 {
-    private $users = [];
     // To add a new action:
     // 'placeholder' => <private method name to be called>
-    private $cmds = [
+    private $availableCommands = [
         '->' => 'post',
         '' => 'timeline',
         'follows' => 'follows',
         'wall' => 'wall',
     ];
+    private $users = [];
 
     public function process($input)
     {
         $input = explode(' ', $input);
         $name = $input[0];
-        $cmd = (isset($input[1])) ? $input[1] : '';
+        $rawCmd = (isset($input[1])) ? $input[1] : '';
 
-        $command = $this->cmds[$cmd];
-        $this->$command($name, $input);
+        $command = $this->availableCommands[$rawCmd]; // ex. '->' - 'post'
+        $this->$command($name, $input); // $this->post(...)
+    }
+
+    public function run()
+    {
+        do {
+            echo '> ';
+            $input = trim(fgets(STDIN));
+            $this->process($input);
+        } while($input != 'quit');
     }
 
     private function post($name, $input)
@@ -65,25 +74,16 @@ class TwiCli
         }
     }
 
-    public function run()
-    {
-        do {
-            echo '> ';
-            $input = trim(fgets(STDIN));
-            $this->process($input);
-        } while($input != 'quit');
-    }
-
+    // Ensire that we add a user once and only once
     private function findUser($currentName)
     {
-        // If user already exist let's just return it
+        $sanitizedUsername = ucfirst($currentName); // insensitive to first letter
         foreach ($this->users as $name => $user) {
-            if ($currentName == $name) {
+            if ($sanitizedUsername == $name) {
                 return $user;
             }
         }
 
-        // Otherwise we add it and return it
         $newUser = new User($currentName);
         $this->users[$newUser->getName()] = $newUser;
         return $newUser;
