@@ -29,6 +29,11 @@ class User
         $this->wall->addUser($user);
     }
 
+    public function wall()
+    {
+        return $this->wall->read();
+    }
+
     public function getMessages()
     {
         return $this->wall->getMyMessages();

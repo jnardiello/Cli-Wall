@@ -30,4 +30,21 @@ class Wall
     {
         $this->users[$user->getName()] = $user;
     }
+
+    public function read()
+    {
+        $publicWall = [];
+        $result = [];
+
+        foreach ($this->users as $user) {
+            $publicWall = array_merge($publicWall, $user->getMessages());
+        }
+
+        foreach ($publicWall as $message) {
+            $result[$message->getTimestamp()] = $message;
+        }
+
+        ksort($result);
+        return array_values($result);
+    }
 }

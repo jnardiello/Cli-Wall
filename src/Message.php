@@ -22,6 +22,11 @@ class Message
         return $this->message;
     }
 
+    public function getTimestamp()
+    {
+        return $this->age;
+    }
+
     public function getAge()
     {
         return $this->prettyRange($this->age);
