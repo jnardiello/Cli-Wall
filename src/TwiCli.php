@@ -20,12 +20,11 @@ class TwiCli
 
     public function process($input)
     {
-        $input = explode(' ', $input);
-        $name = $input[0];
-        $rawCmd = (isset($input[1])) ? $input[1] : '';
+        $params = $this->parameters($input);
+        $cmd = $params['cmd'];
+        $method = $this->availableCommands[$cmd]; // ex. '->' - 'post'
 
-        $command = $this->availableCommands[$rawCmd]; // ex. '->' - 'post'
-        $this->$command($name, $input); // $this->post(...)
+        $this->$method($params); // $this->post(...)
     }
 
     public function run()
@@ -37,27 +36,25 @@ class TwiCli
         } while($input != 'quit');
     }
 
-    private function post($name, $input)
+    private function post($params)
     {
-        $message = implode(' ', array_slice($input, 2));
-
-        $user = $this->findUser($name);
+        $user = $params['user'];
+        $message = $params['target'];
         $user->post($message);
     }
 
-    private function follows($name, $input)
+    private function follows($params)
     {
-        $target = $input[2];
-
-        $user = $this->findUser($name);
+        $target = $params['target'];
+        $user = $params['user'];
         $followingUser = $this->findUser($target);
 
         $user->follow($followingUser);
     }
 
-    private function wall($name)
+    private function wall($params)
     {
-        $user = $this->findUser($name);
+        $user = $params['user'];
         $wall = $user->wall();
 
         foreach ($wall as $message) {
@@ -65,9 +62,9 @@ class TwiCli
         }
     }
 
-    private function timeline($name)
+    private function timeline($params)
     {
-        $user = $this->findUser($name);
+        $user = $params['user'];
         foreach ($user->getMessages() as $message) {
             // test message (1 seconds ago)
             echo "{$message->getValue()} ({$message->getAge()})\n";
@@ -92,5 +89,19 @@ class TwiCli
     public function getUsers()
     {
         return $this->users;
+    }
+
+    private function parameters($input)
+    {
+        $input = explode(' ', $input);
+        $user = $this->findUser($input[0]);
+        $cmd = (isset($input[1])) ? $input[1] : '';
+        $target = implode(' ', array_slice($input, 2));
+
+        return [
+            'user' => $user,
+            'cmd' => $cmd,
+            'target' => $target,
+        ];
     }
 }
