@@ -15,7 +15,7 @@ class Message
     public function __construct($message, User $author)
     {
         $this->message = $message;
-        $this->age = time();
+        $this->creationDate = time();
         $this->author = $author;
     }
 
@@ -31,18 +31,18 @@ class Message
 
     public function getTimestamp()
     {
-        return $this->age;
+        return $this->creationDate;
     }
 
     public function getAge()
     {
-        return $this->prettyRange($this->age);
+        return $this->prettyRange($this->creationDate);
     }
 
     private function prettyRange($timestamp)
     {
         $now = time();
-        $timeRangeSecs = ($now - $this->age) ? $now - $this->age : 1;
+        $timeRangeSecs = ($now - $timestamp) ? $now - $timestamp : 1;
 
         $minutes = floor($timeRangeSecs/60);
         $hours = floor($timeRangeSecs/(60*60));
