@@ -9,6 +9,14 @@ namespace TwiCli;
 class TwiCli
 {
     private $users = [];
+    // To add a new action:
+    // 'placeholder' => <private method name to be called>
+    private $cmds = [
+        '->' => 'post',
+        '' => 'timeline',
+        'follows' => 'follows',
+        'wall' => 'wall',
+    ];
 
     public function process($input)
     {
@@ -16,25 +24,8 @@ class TwiCli
         $name = $input[0];
         $cmd = (isset($input[1])) ? $input[1] : '';
 
-        switch ($cmd) {
-        case '->':
-            $this->post($name, $input);
-            break;
-        case '':
-            $this->timeline($name);
-            break;
-        case 'follows':
-            $this->follows($name, $input);
-            break;
-        case 'wall':
-            $user = $this->findUser($name);
-            $wall = $user->wall();
-
-            foreach ($wall as $message) {
-                echo "{$message->getAuthor()} - {$message->getValue()} ({$message->getAge()})\n";
-            }
-            break;
-        }
+        $command = $this->cmds[$cmd];
+        $this->$command($name, $input);
     }
 
     private function post($name, $input)
@@ -53,6 +44,16 @@ class TwiCli
         $followingUser = $this->findUser($target);
 
         $user->follow($followingUser);
+    }
+
+    private function wall($name)
+    {
+        $user = $this->findUser($name);
+        $wall = $user->wall();
+
+        foreach ($wall as $message) {
+            echo "{$message->getAuthor()} - {$message->getValue()} ({$message->getAge()})\n";
+        }
     }
 
     private function timeline($name)
