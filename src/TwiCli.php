@@ -44,6 +44,15 @@ class TwiCli
         }
     }
 
+    public function run()
+    {
+        do {
+            echo '> ';
+            $input = trim(fgets(STDIN));
+            $this->process($input);
+        } while($input != 'quit');
+    }
+
     private function findUser($currentName)
     {
         // If user already exist let's just return it
