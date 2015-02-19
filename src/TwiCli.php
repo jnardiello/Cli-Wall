@@ -27,6 +27,13 @@ class TwiCli
                 // test message (1 seconds ago)
                 echo "{$message->getValue()} ({$message->getAge()})\n";
             }
+        } else if ($cmd == 'follows') {
+            $following = $input[2];
+
+            $user = $this->findUser($name);
+            $followingUser = $this->findUser($following);
+
+            $user->follow($followingUser);
         }
     }
 

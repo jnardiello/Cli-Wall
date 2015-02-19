@@ -41,6 +41,18 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCanUserCanFollowAnotherUser()
+    {
+        $this->twiCli->process('Alice -> Hello World');
+        $this->twiCli->process('Bob -> Hello World Again');
+
+        $this->twiCli->process('Alice follows Bob');
+
+        $alice = $this->twiCli->getUsers()['Alice'];
+
+        $this->assertEquals(1, count($alice->getFollowingList()));
+    }
+
     private function assertUsersEquals($number)
     {
         $users = $this->twiCli->getUsers();
