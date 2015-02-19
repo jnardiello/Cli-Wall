@@ -14,7 +14,6 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
         $this->twiCli->process('Alice -> This is test message 1');
         $this->twiCli->process('Alice -> This is test message 2');
 
-        // We expect one user (Alice) and two messages for Alice
         $this->assertUsersEquals(1);
         $this->assertMessagesPerUserEquals(2, 'Alice');
     }
@@ -24,7 +23,6 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
         $this->twiCli->process('Alice -> This is test message');
         $this->twiCli->process('Bob -> This is test message');
 
-        // We expect two users with one message each
         $this->assertUsersEquals(2);
         $this->assertMessagesPerUserEquals(1, 'Alice');
         $this->assertMessagesPerUserEquals(1, 'Bob');
@@ -38,8 +36,8 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
 
         $this->twiCli->process('Alice');
         $this->expectOutputString(
-            "Hello World\n" .
-            "Yesterday the weather was really nice\n"
+            "Hello World (1 seconds ago)\n" .
+            "Yesterday the weather was really nice (1 seconds ago)\n"
         );
     }
 

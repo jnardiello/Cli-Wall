@@ -24,7 +24,8 @@ class TwiCli
         } else if ($cmd == '') {
             $user = $this->findUser($name);
             foreach ($user->getMessages() as $message) {
-                echo $message->getValue() . "\n";
+                // test message (1 seconds ago)
+                echo "{$message->getValue()} ({$message->getAge()})\n";
             }
         }
     }
