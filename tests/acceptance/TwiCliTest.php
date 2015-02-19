@@ -53,7 +53,7 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($alice->getFollowingList()));
     }
 
-    public function testCanReadUserTimeline()
+    public function testCanReadUserWall()
     {
         $this->twiCli->process('Alice -> Hello World');
         sleep(1); // we need this as timestamps are used as keys in the wall
@@ -63,8 +63,8 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
         $this->twiCli->process('Alice wall');
 
         $expectedOutputWall = 
-                "Alice - Hello World (1 seconds ago)\n" . 
-                "Bob - Hello World Again! (1 seconds ago)\n";
+                "Bob - Hello World Again! (1 seconds ago)\n" .
+                "Alice - Hello World (1 seconds ago)\n";
 
         $this->expectOutputString($expectedOutputWall);
     }

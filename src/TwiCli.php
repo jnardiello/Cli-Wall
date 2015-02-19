@@ -2,8 +2,6 @@
 
 namespace TwiCli;
 
-use TwiCli\Actions\Post;
-
 /**
  * Class TwiCli
  * @author Jacopo Nardiello
@@ -29,7 +27,7 @@ class TwiCli
             $this->availableCommands[$params['cmd']];
 
         $action = new $class();
-        $action->execute($params);
+        $this->executeClass($action, $params);
     }
 
     public function run()
@@ -39,6 +37,12 @@ class TwiCli
             $input = trim(fgets(STDIN));
             $this->process($input);
         } while($input != 'quit');
+    }
+
+    // We make sure that actions implements the executable interface
+    private function executeClass(\TwiCli\Actions\Executable $class, $params) 
+    {
+        $class->execute($params);
     }
 
     // Ensire that we add a user once and only once
