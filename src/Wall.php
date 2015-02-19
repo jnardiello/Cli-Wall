@@ -8,7 +8,13 @@ namespace TwiCli;
  */
 class Wall
 {
+    private $users = [];
     private $messages = [];
+
+    public function __construct(User $user)
+    {
+        $this->users[$user->getName()] = $user;
+    }
 
     public function getMyMessages()
     {
@@ -18,5 +24,10 @@ class Wall
     public function add(Message $message)
     {
         $this->messages[] = $message;
+    }
+
+    public function addUser(User $user)
+    {
+        $this->users[$user->getName()] = $user;
     }
 }

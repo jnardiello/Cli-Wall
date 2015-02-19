@@ -8,8 +8,9 @@ namespace TwiCli;
  */
 class User
 {
-    private $messages = [];
     private $name;
+    private $wall;
+    private $following = [];
 
     public function __construct($name)
     {
@@ -22,6 +23,12 @@ class User
         $this->wall->add(new Message($message));
     }
 
+    public function follow(User $user)
+    {
+        $this->following[] = $user;
+        $this->wall->addUser($user);
+    }
+
     public function getMessages()
     {
         return $this->wall->getMyMessages();
@@ -30,5 +37,10 @@ class User
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getFollowingList()
+    {
+        return $this->following;
     }
 }
