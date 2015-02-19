@@ -2,16 +2,19 @@
 
 namespace TwiCli;
 
+use TwiCli\Actions\Post;
+
 /**
  * Class TwiCli
  * @author Jacopo Nardiello
  */
 class TwiCli
 {
+    const ACTIONS_NAMESPACE = '\\TwiCli\\Actions\\';
     // To add a new action:
     // 'placeholder' => <private method name to be called>
     private $availableCommands = [
-        '->' => 'post',
+        '->' => 'Post',
         '' => 'timeline',
         'follows' => 'follows',
         'wall' => 'wall',
@@ -23,8 +26,11 @@ class TwiCli
         $params = $this->parameters($input);
         $cmd = $params['cmd'];
         $method = $this->availableCommands[$cmd]; // ex. '->' - 'post'
+        $actionName = self::ACTIONS_NAMESPACE . $method;
+        $action = new $actionName();
+        $action->execute($params);
 
-        $this->$method($params); // $this->post(...)
+        /* $this->$method($params); // $this->post(...) */
     }
 
     public function run()
@@ -34,13 +40,6 @@ class TwiCli
             $input = trim(fgets(STDIN));
             $this->process($input);
         } while($input != 'quit');
-    }
-
-    private function post($params)
-    {
-        $user = $params['user'];
-        $message = $params['target'];
-        $user->post($message);
     }
 
     private function follows($params)
