@@ -34,6 +34,13 @@ class TwiCli
             $followingUser = $this->findUser($following);
 
             $user->follow($followingUser);
+        } else if ($cmd == 'wall') {
+            $user = $this->findUser($name);
+            $wall = $user->wall();
+
+            foreach ($wall as $message) {
+                echo "{$message->getAuthor()} - {$message->getValue()} ({$message->getAge()})\n";
+            }
         }
     }
 

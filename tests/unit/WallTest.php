@@ -11,15 +11,16 @@ class WallTest extends \PHPUnit_Framework_TestCase
         sleep(1);
 
         $bob = new User('Bob');
+        $alice->follow($bob);
         $bob->post('This is another test message');
         sleep(1);
 
         $alice->post('Ehi There!');
 
-        $bob->follow($alice);
-        $wall = $bob->wall();
+        $wall = $alice->wall();
 
         $this->assertEquals(3, count($wall));
+        $this->assertEquals('This is a test message', $wall[0]->getValue());
         $this->assertEquals('This is another test message', $wall[1]->getValue());
     }
 }

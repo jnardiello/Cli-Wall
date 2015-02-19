@@ -20,7 +20,7 @@ class User
 
     public function post($message)
     {
-        $this->wall->add(new Message($message));
+        $this->wall->add(new Message($message, $this));
     }
 
     public function follow(User $user)

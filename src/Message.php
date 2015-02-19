@@ -10,11 +10,18 @@ class Message
 {
     private $message;
     private $age;
+    private $author;
 
-    public function __construct($message)
+    public function __construct($message, User $author)
     {
         $this->message = $message;
         $this->age = time();
+        $this->author = $author;
+    }
+
+    public function getAuthor()
+    {
+        return $this->author->getName();
     }
 
     public function getValue()

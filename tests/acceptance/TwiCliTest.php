@@ -41,7 +41,7 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCanUserCanFollowAnotherUser()
+    public function testUserCanFollowAnotherUser()
     {
         $this->twiCli->process('Alice -> Hello World');
         $this->twiCli->process('Bob -> Hello World Again');
@@ -51,6 +51,22 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
         $alice = $this->twiCli->getUsers()['Alice'];
 
         $this->assertEquals(1, count($alice->getFollowingList()));
+    }
+
+    public function testCanReadUserTimeline()
+    {
+        $this->twiCli->process('Alice -> Hello World');
+        sleep(1); // we need this as timestamps are used as keys in the wall
+        $this->twiCli->process('Bob -> Hello World Again!');
+
+        $this->twiCli->process('Alice follows Bob');
+        $this->twiCli->process('Alice wall');
+
+        $expectedOutputWall = 
+                "Alice - Hello World (1 seconds ago)\n" . 
+                "Bob - Hello World Again! (1 seconds ago)\n";
+
+        $this->expectOutputString($expectedOutputWall);
     }
 
     private function assertUsersEquals($number)
