@@ -13,19 +13,15 @@ class TwiCli
     public function process($input)
     {
         $input = explode(' ', $input);
-        $cmd = (isset($input[1])) ? $input[1] : '';
         $name = $input[0];
+        $cmd = (isset($input[1])) ? $input[1] : '';
 
         switch ($cmd) {
         case '->':
-            $this->post($input);
+            $this->post($name, $input);
             break;
         case '':
-            $user = $this->findUser($name);
-            foreach ($user->getMessages() as $message) {
-                // test message (1 seconds ago)
-                echo "{$message->getValue()} ({$message->getAge()})\n";
-            }
+            $this->timeline($name);
             break;
         case 'follows':
             $following = $input[2];
@@ -46,13 +42,21 @@ class TwiCli
         }
     }
 
-    private function post($input)
+    private function post($name, $input)
     {
-        $name = $input[0];
         $message = implode(' ', array_slice($input, 2));
 
         $user = $this->findUser($name);
         $user->post($message);
+    }
+
+    private function timeline($name)
+    {
+        $user = $this->findUser($name);
+        foreach ($user->getMessages() as $message) {
+            // test message (1 seconds ago)
+            echo "{$message->getValue()} ({$message->getAge()})\n";
+        }
     }
 
     public function run()
