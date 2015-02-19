@@ -2,8 +2,7 @@
     "name": "jnardiello/cli-wall",
     "description": "A twitter-like wall living in your CLI",
     "require-dev": {
-        "phpunit/phpunit": "~4.4",
-        "behat/behat": "2.4.*@stable"
+        "phpunit/phpunit": "~4.4"
     },
     "license": "MIT",
     "authors": [
