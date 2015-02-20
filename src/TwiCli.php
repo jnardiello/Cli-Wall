@@ -38,13 +38,14 @@ class TwiCli
     // Ensire that we add a user once and only once
     private function findUser($currentName)
     {
+        $sanitizedName = ucfirst($currentName);
         foreach ($this->users as $name => $user) {
-            if (ucfirst($currentName) == $name) {
+            if ($sanitizedName == $name) {
                 return $user;
             }
         }
 
-        $newUser = new User($currentName);
+        $newUser = new User($sanitizedName);
         $this->users[$newUser->getName()] = $newUser;
         return $newUser;
     }
