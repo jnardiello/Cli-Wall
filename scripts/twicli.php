@@ -6,4 +6,8 @@ require_once(__DIR__ . '/../bootstrap.php');
 
 $twiCli = new TwiCli();
 
-$twiCli->run();
+do {
+    echo '> ';
+    $input = trim(fgets(STDIN));
+    $twiCli->process($input);
+} while ($input != 'quit');

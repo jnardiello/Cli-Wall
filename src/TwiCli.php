@@ -21,36 +21,25 @@ class TwiCli
 
     public function process($input)
     {
-        $params = $this->parameters($input);
+        $params = $this->prettyParams($input);
         $class = 
             self::ACTIONS_NAMESPACE . 
             $this->availableCommands[$params['cmd']];
 
         $action = new $class();
-        $this->executeClass($action, $params);
+        $action->execute($params);
     }
 
-    public function run()
+    public function getUsers()
     {
-        do {
-            echo '> ';
-            $input = trim(fgets(STDIN));
-            $this->process($input);
-        } while($input != 'quit');
-    }
-
-    // We make sure that actions implements the executable interface
-    private function executeClass(\TwiCli\Actions\Executable $class, $params) 
-    {
-        $class->execute($params);
+        return $this->users;
     }
 
     // Ensire that we add a user once and only once
     private function findUser($currentName)
     {
-        $sanitizedUsername = ucfirst($currentName); // insensitive to first letter
         foreach ($this->users as $name => $user) {
-            if ($sanitizedUsername == $name) {
+            if (ucfirst($currentName) == $name) {
                 return $user;
             }
         }
@@ -60,18 +49,14 @@ class TwiCli
         return $newUser;
     }
 
-    public function getUsers()
-    {
-        return $this->users;
-    }
-
-    private function parameters($input)
+    private function prettyParams($input)
     {
         $input = explode(' ', $input);
         $user = $this->findUser($input[0]);
         $cmd = (isset($input[1])) ? $input[1] : '';
         $target = implode(' ', array_slice($input, 2));
 
+        // target will be either a string or a user object depending on action
         foreach ($this->users as $name => $targetUser) {
             if (ucfirst($target) == $name)
                 $target = $targetUser;
