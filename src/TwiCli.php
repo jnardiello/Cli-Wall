@@ -21,6 +21,13 @@ class TwiCli
 
     public function process($input)
     {
+        /* prittifiedparams
+         * [
+         *   'user' => ...,
+         *   'cmd' => ...,
+         *   'target' => ...,
+         * ]
+        **/
         $params = $this->prettyParams($input);
 
         if (!array_key_exists($params['cmd'], $this->availableCommands)) {
@@ -34,11 +41,6 @@ class TwiCli
 
         $action = new $class();
         $action->execute($params);
-    }
-
-    public function getUsers()
-    {
-        return $this->users;
     }
 
     // Ensire that we add a user once and only once

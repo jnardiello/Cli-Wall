@@ -9,31 +9,6 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
         $this->twiCli = new TwiCli();
     }
 
-    public function testUserCanPostMultipleMessagesOnHisWall()
-    {
-        $commands = [
-            'Alice -> This is test message 1',
-            'Alice -> This is test message 2',
-        ];
-        $this->executeCommands($commands);
-
-        $this->assertUsersEquals(1);
-        $this->assertMessagesPerUserEquals(2, 'Alice');
-    }
-
-    public function testMultipleUserCanPostOnRespectiveWall()
-    {
-        $commands = [
-            'Alice -> This is test message',
-            'Bob -> This is test message',
-        ];
-        $this->executeCommands($commands);
-
-        $this->assertUsersEquals(2);
-        $this->assertMessagesPerUserEquals(1, 'Alice');
-        $this->assertMessagesPerUserEquals(1, 'Bob');
-    }
-
     public function testCanReadAUserTimeline()
     {
         $commands = [
@@ -48,20 +23,6 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
             "Yesterday the weather was really nice (1 seconds ago)\n" .
             "Hello World (1 seconds ago)\n"
         );
-    }
-
-    public function testUserCanFollowAnotherUser()
-    {
-        $commands = [
-            'Alice -> Hello World',
-            'Bob -> Hello World Again',
-            'Alice follows Bob',
-        ];
-        $this->executeCommands($commands);
-
-        $alice = $this->twiCli->getUsers()['Alice'];
-
-        $this->assertEquals(1, count($alice->getFollowingList()));
     }
 
     public function testCanReadUserWall()
@@ -80,20 +41,6 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
                 "Alice - Hello World (1 seconds ago)\n";
 
         $this->expectOutputString($expectedOutputWall);
-    }
-
-    private function assertUsersEquals($number)
-    {
-        $users = $this->twiCli->getUsers();
-        $this->assertEquals($number, count($users));
-    }
-
-    private function assertMessagesPerUserEquals($numMessages, $user)
-    {
-        $users = $this->twiCli->getUsers();
-        $user = $users[$user];
-        $userMessages = $user->getMessages();
-        $this->assertEquals($numMessages, count($userMessages));
     }
 
     private function executeCommands($inputs) 
