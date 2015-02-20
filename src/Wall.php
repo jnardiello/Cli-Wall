@@ -44,7 +44,8 @@ class Wall
             $result[$message->getTimestamp()] = $message;
         }
 
-        ksort($result);
-        return array_reverse(array_values($result));
+        if (ksort($result)) {
+            return array_reverse(array_values($result));
+        }
     }
 }
