@@ -43,9 +43,4 @@ class User
     {
         return $this->name;
     }
-
-    public function getFollowingList()
-    {
-        return $this->following;
-    }
 }
