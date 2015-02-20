@@ -9,41 +9,47 @@ namespace TwiCli;
 class TwiCli
 {
     const ACTIONS_NAMESPACE = '\\TwiCli\\Actions\\';
-    // To add a new action:
-    // 'placeholder' => <private method name to be called>
+
+    private $users = [];
     private $availableCommands = [
         '->' => 'Post',
         '' => 'Timeline',
         'follows' => 'Follows',
         'wall' => 'Wall',
     ];
-    private $users = [];
+
+    public function run($input = null)
+    {
+        do {
+            echo '> ';
+            $input = trim(fgets(STDIN));
+            $this->process($input);
+        } while ($input != 'quit');
+    }
 
     public function process($input)
     {
-        /* prittifiedparams
-         * [
-         *   'user' => ...,
-         *   'cmd' => ...,
-         *   'target' => ...,
-         * ]
-        **/
         $params = $this->prettyParams($input);
 
-        if (!array_key_exists($params['cmd'], $this->availableCommands)) {
-            echo "Command you types doesn't exist. Try again.\n";
-            return;
+        if ($this->commandIsDefined($params['cmd'])) {
+            $actionName = $this->availableCommands[$params['cmd']];
+            $class = self::ACTIONS_NAMESPACE . $actionName;
+            $action = new $class();
+
+            $action->execute($params);
         }
-
-        $class = 
-            self::ACTIONS_NAMESPACE . 
-            $this->availableCommands[$params['cmd']];
-
-        $action = new $class();
-        $action->execute($params);
     }
 
-    // Ensire that we add a user once and only once
+    private function commandIsDefined($command)
+    {
+        if (!array_key_exists($command, $this->availableCommands)) {
+            echo "The command you typed doesn't exist. Try again.\n";
+            return false;
+        }
+
+        return true;
+    }
+
     private function findUser($currentName)
     {
         $sanitizedName = ucfirst($currentName);
