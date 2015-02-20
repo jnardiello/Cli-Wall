@@ -11,8 +11,11 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
 
     public function testUserCanPostMultipleMessagesOnHisWall()
     {
-        $this->twiCli->process('Alice -> This is test message 1');
-        $this->twiCli->process('Alice -> This is test message 2');
+        $commands = [
+            'Alice -> This is test message 1',
+            'Alice -> This is test message 2',
+        ];
+        $this->executeCommands($commands);
 
         $this->assertUsersEquals(1);
         $this->assertMessagesPerUserEquals(2, 'Alice');
@@ -20,8 +23,11 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleUserCanPostOnRespectiveWall()
     {
-        $this->twiCli->process('Alice -> This is test message');
-        $this->twiCli->process('Bob -> This is test message');
+        $commands = [
+            'Alice -> This is test message',
+            'Bob -> This is test message',
+        ];
+        $this->executeCommands($commands);
 
         $this->assertUsersEquals(2);
         $this->assertMessagesPerUserEquals(1, 'Alice');
@@ -30,9 +36,12 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
 
     public function testCanReadAUserTimeline()
     {
-        $this->twiCli->process('Alice -> Hello World');
-        $this->twiCli->process('Alice -> Yesterday the weather was really nice');
-        $this->twiCli->process('Bob -> Yesterday evening it was amazing!');
+        $commands = [
+            'Alice -> Hello World',
+            'Alice -> Yesterday the weather was really nice',
+            'Bob -> Yesterday evening it was amazing!',
+        ];
+        $this->executeCommands($commands);
 
         $this->twiCli->process('Alice');
         $this->expectOutputString(
@@ -43,10 +52,12 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
 
     public function testUserCanFollowAnotherUser()
     {
-        $this->twiCli->process('Alice -> Hello World');
-        $this->twiCli->process('Bob -> Hello World Again');
-
-        $this->twiCli->process('Alice follows Bob');
+        $commands = [
+            'Alice -> Hello World',
+            'Bob -> Hello World Again',
+            'Alice follows Bob',
+        ];
+        $this->executeCommands($commands);
 
         $alice = $this->twiCli->getUsers()['Alice'];
 
@@ -55,12 +66,14 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
 
     public function testCanReadUserWall()
     {
-        $this->twiCli->process('Alice -> Hello World');
+        $this->executeCommands('Alice -> Hello World');
         sleep(1); // we need this as timestamps are used as keys in the wall
-        $this->twiCli->process('Bob -> Hello World Again!');
-
-        $this->twiCli->process('Alice follows Bob');
-        $this->twiCli->process('Alice wall');
+        $commands = [
+            'Bob -> Hello World Again!',
+            'Alice follows Bob',
+            'Alice wall',
+        ];
+        $this->executeCommands($commands);
 
         $expectedOutputWall = 
                 "Bob - Hello World Again! (1 seconds ago)\n" .
@@ -81,5 +94,17 @@ class TwiCliTest extends \PHPUnit_Framework_TestCase
         $user = $users[$user];
         $userMessages = $user->getMessages();
         $this->assertEquals($numMessages, count($userMessages));
+    }
+
+    private function executeCommands($inputs) 
+    {
+        if (!is_array($inputs)) {
+            $this->twiCli->process($inputs);
+            return;
+        }
+
+        foreach ($inputs as $input) {
+            $this->twiCli->process($input);
+        }
     }
 }
