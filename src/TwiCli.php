@@ -22,6 +22,12 @@ class TwiCli
     public function process($input)
     {
         $params = $this->prettyParams($input);
+
+        if (!array_key_exists($params['cmd'], $this->availableCommands)) {
+            echo "Command you types doesn't exist. Try again.\n";
+            return;
+        }
+
         $class = 
             self::ACTIONS_NAMESPACE . 
             $this->availableCommands[$params['cmd']];
