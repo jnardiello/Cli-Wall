@@ -35,19 +35,21 @@ class StreamRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldGetStreamByType()
     {
-        $postEvent = $this->eventBuilder->setType('message-posted')
+        $postEventType = "message-posted";
+        $followEventType = "user-followed";
+        $postEvent = $this->eventBuilder->setType($postEventType)
                                         ->setOrigin('test-origin')
                                         ->setPayload([])
                                         ->build();
         $this->streamRepository->append($postEvent);
 
-        $followEvent = $this->eventBuilder->setType('user-followed')
+        $followEvent = $this->eventBuilder->setType($followEventType)
                                           ->setOrigin('test-origin')
                                           ->setPayload([])
                                           ->build();
         $this->streamRepository->append($followEvent);
 
-        $stream = $this->streamRepository->getByType($postEvent);
+        $stream = $this->streamRepository->getByType($postEventType);
 
         $this->assertEquals(1, count($stream));
         $this->assertEquals($postEvent, $stream[0]);
