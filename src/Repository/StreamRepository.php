@@ -39,4 +39,18 @@ class StreamRepository
 
         return $result;
     }
+
+    public function getByOrigin($eventOrigin)
+    {
+        $result = [];
+        $stream = $this->eventStore->getStream();
+
+        foreach ($stream as $event) {
+            if ($eventOrigin == $event->getOrigin()) {
+                $result[] = $event;
+            }
+        }
+
+        return $result;
+    }
 }

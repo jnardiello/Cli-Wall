@@ -54,4 +54,26 @@ class StreamRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($stream));
         $this->assertEquals($postEvent, $stream[0]);
     }
+
+    public function testShouldGetStreamByAuthor()
+    {
+        $postEventOrigin = "Alice";
+        $followEventOrigin = "Bob";
+        $postEvent = $this->eventBuilder->setType("message-posted")
+                                        ->setOrigin($postEventOrigin)
+                                        ->setPayload([])
+                                        ->build();
+        $this->streamRepository->append($postEvent);
+
+        $followEvent = $this->eventBuilder->setType("user-followed")
+                                          ->setOrigin($followEventOrigin)
+                                          ->setPayload([])
+                                          ->build();
+        $this->streamRepository->append($followEvent);
+
+        $stream = $this->streamRepository->getByOrigin($postEventOrigin);
+
+        $this->assertEquals(1, count($stream));
+        $this->assertEquals($postEvent, $stream[0]);
+    }
 }

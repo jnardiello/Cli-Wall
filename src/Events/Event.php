@@ -23,4 +23,9 @@ class Event
     {
         return $this->type;
     }
+
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
 }
