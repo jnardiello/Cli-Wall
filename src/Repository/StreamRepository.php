@@ -28,25 +28,22 @@ class StreamRepository
 
     public function getByType($eventType)
     {
-        $result = [];
-        $stream = $this->eventStore->getStream();
-
-        foreach ($stream as $event) {
-            if ($eventType == $event->getType()) {
-                $result[] = $event;
-            }
-        }
-
-        return $result;
+        return $this->getByParam($eventType, 'Type');
     }
 
     public function getByOrigin($eventOrigin)
     {
+        return $this->getByParam($eventOrigin, 'Origin');
+    }
+
+    private function getByParam($parameter, $eventField)
+    {
         $result = [];
         $stream = $this->eventStore->getStream();
+        $method = "get" . $eventField;
 
         foreach ($stream as $event) {
-            if ($eventOrigin == $event->getOrigin()) {
+            if ($parameter == $event->$method()) {
                 $result[] = $event;
             }
         }
