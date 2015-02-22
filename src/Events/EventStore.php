@@ -15,7 +15,7 @@ class EventStore
         $this->stream[] = $event;
     }
 
-    public function getEventsStream()
+    public function getStream()
     {
         return $this->stream;
     }
