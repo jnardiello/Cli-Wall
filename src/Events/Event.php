@@ -18,4 +18,9 @@ class Event
         $this->origin = $origin;
         $this->payload = $payload;
     }
+
+    public function getType()
+    {
+        return $this->type;
+    }
 }

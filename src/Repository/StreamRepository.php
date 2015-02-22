@@ -25,4 +25,18 @@ class StreamRepository
     {
         $this->eventStore->push($event);
     }
+
+    public function getByType($eventType)
+    {
+        $result = [];
+        $stream = $this->eventStore->getStream();
+
+        foreach ($stream as $event) {
+            if ($eventType == $event->getType()) {
+                $result[] = $event;
+            }
+        }
+
+        return $result;
+    }
 }
