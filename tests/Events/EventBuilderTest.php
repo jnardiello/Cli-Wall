@@ -16,7 +16,8 @@ class EventBuilderTest extends \PHPUnit_Framework_TestCase
         $eventBuilder = new EventBuilder();
         $event = $eventBuilder->setType($type)
                               ->setOrigin($origin)
-                              ->setPayload($payload);
+                              ->setPayload($payload)
+                              ->build();
         $expectedEvent = new Event($type, $origin, $payload);
 
         $this->assertEquals($expectedEvent, $event);
