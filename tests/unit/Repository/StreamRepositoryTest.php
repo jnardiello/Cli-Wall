@@ -7,28 +7,29 @@ use TwiCli\Events\EventBuilder;
 
 class StreamRepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $this->eventBuilder = new EventBuilder();
+        $eventStore = new EventStore();
+        $this->streamRepository = new StreamRepository($eventStore);
+    }
+
     public function testShouldReturnAStreamOfEvents()
     {
-        $eventStore = new EventStore();
-        $streamRepository = new StreamRepository($eventStore);
-
-        $stream = $streamRepository->getAll();
+        $stream = $this->streamRepository->getAll();
 
         $this->assertTrue(is_array($stream));
     }
 
     public function testShouldAppenEventToStream()
     {
-        $eventBuilder = new EventBuilder();
-        $eventStore = new EventStore();
-        $streamRepository = new StreamRepository($eventStore);
-        $event = $eventBuilder->setType('test-type')
-                              ->setOrigin('test-origin')
-                              ->setPayload([])
-                              ->build();
+        $event = $this->eventBuilder->setType('test-type')
+                                    ->setOrigin('test-origin')
+                                    ->setPayload([])
+                                    ->build();
 
-        $streamRepository->append($event);
+        $this->streamRepository->append($event);
 
-        $this->assertEquals(1, count($streamRepository->getAll()));
+        $this->assertEquals(1, count($this->streamRepository->getAll()));
     }
 }
