@@ -4,10 +4,6 @@ namespace TwiCli\Events;
 
 class EventStoreTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-    }
-
     public function testCanStoreAGenericEvent()
     {
         $eventStore = new EventStore();
