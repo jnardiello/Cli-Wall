@@ -55,25 +55,34 @@ class StreamRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($postEvent, $stream[0]);
     }
 
-    public function testShouldGetStreamByAuthor()
+    public function testShouldGetStreamByTypeAndAuthor()
     {
-        $postEventOrigin = "Alice";
-        $followEventOrigin = "Bob";
-        $postEvent = $this->eventBuilder->setType("message-posted")
-                                        ->setOrigin($postEventOrigin)
-                                        ->setPayload([])
-                                        ->build();
-        $this->streamRepository->append($postEvent);
+        $alice = "Alice";
+        $bob = "Bob";
+        $postType = "message-posted";
+        $followType = "user-followed";
 
-        $followEvent = $this->eventBuilder->setType("user-followed")
-                                          ->setOrigin($followEventOrigin)
-                                          ->setPayload([])
-                                          ->build();
-        $this->streamRepository->append($followEvent);
+        $postEventAlice = $this->eventBuilder->setType($postType)
+                                             ->setOrigin($alice)
+                                             ->setPayload([])
+                                             ->build();
+        $this->streamRepository->append($postEventAlice);
 
-        $stream = $this->streamRepository->getByOrigin($postEventOrigin);
+        $followEventAlice = $this->eventBuilder->setType($followType)
+                                               ->setOrigin($alice)
+                                               ->setPayload([])
+                                               ->build();
+        $this->streamRepository->append($followEventAlice);
+
+        $followEventBob = $this->eventBuilder->setType($followType)
+                                             ->setOrigin($bob)
+                                             ->setPayload([])
+                                             ->build();
+        $this->streamRepository->append($followEventBob);
+
+        $stream = $this->streamRepository->getByTypeAndOrigin($postType, $alice);
 
         $this->assertEquals(1, count($stream));
-        $this->assertEquals($postEvent, $stream[0]);
+        $this->assertEquals($postEventAlice, $stream[0]);
     }
 }
