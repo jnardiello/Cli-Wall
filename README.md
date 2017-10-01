@@ -1,5 +1,5 @@
-# cli-wall
-A Cli-oriented Twitter clone
+# Cli-Wall
+A Cli-oriented Twitter clone. This was done for the [Codurance](https://codurance.com/) coding challenge back in 2015 when they didn't impose any restriction on the language to use.
 
 ## Requirements
 - `PHP 5x` installed on your machine. You can quickly grab a php vagrant machine [here](http://puphpet.com).
